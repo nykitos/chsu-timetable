@@ -27,9 +27,9 @@ def clientinit():
     all_boards = client.list_boards()
     board = client.get_board('61330bb18f46e673ee876b15')
     print(board.get_labels())
-    return board.all_lists()[2:9] , client
+    return board.all_lists()[2:9], client
 
-
+delt_date = date(2021,11,8)
 data = date(2021,11,8)
 data = data.today()
 start_date = data + timedelta(days = 1)
@@ -41,11 +41,8 @@ iso_end = iso_end.split('-')
 schedule = get_schedule(f'{iso_start[2]}.{iso_start[1]}.{iso_start[0]}', f'{iso_end[2]}.{iso_end[1]}.{iso_end[0]}')
 trlist, client = clientinit()
 weekname = {0: 'Понедельник', 1 : 'Вторник', 2 : 'Среда', 3 : 'Четверг', 4 : 'Пятница', 5 : 'Суббота'}
-#dejur = ['Романов Тимур','Сапарбаев Нуратдин','Сатторов Оллоназар','Смирнов Александр','Тимаев Никита','Титов Андрей',
-#'Ярашбаев Алишер','Абдукодиров Жавохир','Варварский Ярослав','Варганов Никита','Гринько Дмитрий','Кенжабаев Адхам','Мирзалиев Рахмали']
-#ddej = {}
-with open('dejdata.pickle', 'rb') as f:
-    dejur,ddej = pickle.load(f)
+dejur = ['Романов Тимур','Сапарбаев Нуратдин','Сатторов Оллоназар','Смирнов Александр','Тимаев Никита','Титов Андрей',
+'Ярашбаев Алишер','Абдукодиров Жавохир','Варварский Ярослав','Варганов Никита','Гринько Дмитрий','Тимофеенко Никита','Мирзалиев Рахмали']
 for i in range(6):
     i_day = start_date + timedelta(days = i)
     i_weekday = i_day.weekday()
@@ -54,17 +51,9 @@ for i in range(6):
     i_list = trlist[i_weekday]
     i_list.archive_all_cards()
     i_list.set_name(f'''{weekname[i_weekday]} / {i_day.day}.{i_day.month}.{i_day.year}''')
-    if i_day in ddej:
-        i_list.add_card(f'Дежурство {ddej[i_day]}')
-    else:
-        dejurnii = dejur.pop(0)
-        dejur.append(dejurnii)
-        i_list.add_card(f'Дежурство {dejurnii}')
-        ddej[i_day] = dejurnii
-dejdata = [dejur,ddej]
+    delta = i_day - delt_date
+    i_list.add_card(f'Дежурство {dejur[delta.days % len(dejur)]}')
 
-with open('dejdata.pickle','wb') as f:
-    pickle.dump(dejdata, f)
 labels = [
 Label(client,'61330bb20b749303b1cd9f82', 'Информатика'),
 Label(client,'61330bb4c2449a1d16546b0b', 'Математика'),
