@@ -4,8 +4,7 @@ from trello.label import Label
 from datetime import date
 from datetime import timedelta
 import json
-import pickle
-
+import googlecalendar
 
 def get_schedule(start_date, end_date = None):
     headers = {
@@ -26,7 +25,6 @@ def clientinit():
         )
     all_boards = client.list_boards()
     board = client.get_board('61330bb18f46e673ee876b15')
-    print(board.get_labels())
     return board.all_lists()[2:9], client
 
 delt_date = date(2021,11,8)
@@ -35,10 +33,10 @@ data = data.today()
 start_date = data + timedelta(days = 1)
 iso_start = start_date.isoformat()
 iso_start = iso_start.split('-')
-end_date = data + timedelta(days = 6)
-iso_end = end_date.isoformat()
-iso_end = iso_end.split('-')
-schedule = get_schedule(f'{iso_start[2]}.{iso_start[1]}.{iso_start[0]}', f'{iso_end[2]}.{iso_end[1]}.{iso_end[0]}')
+t_end_date = data + timedelta(days = 6)
+t_iso_end = t_end_date.isoformat()
+t_iso_end = t_iso_end.split('-')
+schedule = get_schedule(f'{iso_start[2]}.{iso_start[1]}.{iso_start[0]}', f'{t_iso_end[2]}.{t_iso_end[1]}.{t_iso_end[0]}')
 trlist, client = clientinit()
 weekname = {0: 'Понедельник', 1 : 'Вторник', 2 : 'Среда', 3 : 'Четверг', 4 : 'Пятница', 5 : 'Суббота'}
 dejur = ['Романов Тимур','Сапарбаев Нуратдин','Сатторов Оллоназар','Смирнов Александр','Тимаев Никита','Титов Андрей',
@@ -86,3 +84,18 @@ for urok in schedule:
     else:
         label = labels['Другое']
     u_list.add_card(card, labels = [label])
+
+c_end_date = data + timedelta(days = 30)
+c_iso_end = c_end_date.isoformat()
+c_iso_end = c_iso_end.split('-')
+schedule = get_schedule(f'{iso_start[2]}.{iso_start[1]}.{iso_start[0]}', f'{c_iso_end[2]}.{c_iso_end[1]}.{c_iso_end[0]}')
+calendar = googlecalendar.GoogleCalendar('rbgqjcunu5ecae94g3t1ba9710@group.calendar.google.com','upbeat-splicer-337211-3153c8aa65b8.json')
+calendar.clear_events()
+for i in range (30):
+    i_day = start_date + timedelta(days = i)
+    if i_day.weekday() == 6:
+        continue
+    delta = i_day - delt_date
+    calendar.add_attendant(dejur[delta.days % len(dejur)],i_day.isoformat())
+for urok in schedule:
+    calendar.create_event(urok)
