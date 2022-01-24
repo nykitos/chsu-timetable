@@ -41,7 +41,7 @@ class Trelloschedule:
                 continue
             i_list = self.lists[i_weekday]
             delta = i_day - delt_date
-            i_list.add_card(f'Дежурство {self.dejur[(delta.days % len(self.dejur))-delta.days//7]% len(self.dejur)}')
+            i_list.add_card(f'Дежурство {self.dejur[(delta.days % len(self.dejur))-delta.days//7 % len(self.dejur)]}')
 
     def add_schedule(self,schedule):
         for urok in schedule:
