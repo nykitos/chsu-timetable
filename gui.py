@@ -18,7 +18,6 @@ def save_data():
 
 def check_date_loop():
     while True:
-        print(date.today(), date.today() >= data['last_update'] + timedelta(data['update_range']))
         if date.today() >= data['last_update'] + timedelta(data['update_range']):
             data['last_update'] = date.today()
             save_data()
@@ -580,7 +579,6 @@ def group_menu():
             return 'exit'
 
 def menu(hide = False):
-    print(data)
     menu = ['', ['Обновить расписание','Открыть окно', '---', 'Выход']]
     layout = [  [sg.Text('Приветствую тебя кто бы ты ни был')],
                 [sg.Text('Это приложение позволяет в автоматическом режиме добавлять расписание чгу на доску в Trello и GoogleCalendar')],

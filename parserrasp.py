@@ -36,7 +36,7 @@ def trello_update(data):
     trello.add_schedule(schedule)
 
 def calendar_update(data):
-    start_date = date.today() 
+    start_date = date.today()
     end_date = start_date + timedelta(days = data['cal_update_len'])
     schedule = get_schedule(data,start_date.strftime('%d.%m.%Y'), end_date.strftime('%d.%m.%Y'))
     calendar = googlecalendar.GoogleCalendar(data)
@@ -47,10 +47,8 @@ def calendar_update(data):
 
 def update_all(data):
     if 'trello' in data and data['trello'] :
-        print('Обновляю трелло')
         trello_update(data)
     if 'calendar' in data and data['calendar']:
-        print('Обновляю календарь')
         calendar_update(data)
 
 if __name__ == '__main__':
