@@ -1,6 +1,6 @@
 # chsu-timetable
 Проограмма позваляет в автоматическом режиме добавлять расписание чгу на Trello и GoogleCalendar
-Сама программа лежит здесь: https://drive.google.com/file/d/1GpEDBleazrfVikR0NyMvscI5r-Kw_0lD/view?usp=sharing    
+Сама программа лежит здесь: https://drive.google.com/file/d/11_Cjof6dtB3J6yGLW2wVEx8SEGjKJm08/view?usp=sharing   
 ## Возможности:    
 1) Добавлять расписание на трелло, с метками о типе занятия
 2) Добавлять расписание на один или несколько гугл календарей в зависимости от типа занятия
