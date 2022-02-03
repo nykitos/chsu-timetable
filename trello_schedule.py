@@ -13,9 +13,13 @@ class Trelloschedule:
             token = data['trello_token']
             )
         self.board = self.client.get_board(data['trello_board'])
-        self.lists = self.board.all_lists()[data['trello_startlist'] : data['trello_startlist']+7]
-        self.dejur = data['dejur']
-        self.labels = data['labels']
+        self.lists = self.board.open_lists()[data['trello_startlist'] : data['trello_startlist']+7]
+        self.att_on =  data['att_on']
+        if self.att_on:
+            self.attendants = data['attendants']
+        self.labels_on = data['labels_on']
+        if self.labels_on:
+            self.labels = data['labels']
 
     def clear(self):
         delt_date = date(2021,11,8)
@@ -41,7 +45,7 @@ class Trelloschedule:
                 continue
             i_list = self.lists[i_weekday]
             delta = i_day - delt_date
-            i_list.add_card(f'Дежурство {self.dejur[(delta.days % len(self.dejur))-delta.days//7 % len(self.dejur)]}')
+            i_list.add_card(f'Дежурство {self.attendants[(delta.days % len(self.attendants))-delta.days//7 % len(self.attendants)]}')
 
     def add_schedule(self,schedule):
         for urok in schedule:
@@ -53,7 +57,7 @@ class Trelloschedule:
                 card += f'''{urok['auditory']['title']} / {urok['build']['title']}'''
             else:
                 card += 'Онлайн'
-            if self.labels:
+            if self.labels_on:
                 u_list.add_card(card,
                 labels = [Label(self.client,self.labels[urok['abbrlessontype']], '123')])
             else:

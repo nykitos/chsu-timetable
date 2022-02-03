@@ -10,13 +10,13 @@ class GoogleCalendar():
     def __init__(self,data):
         credentials = service_account.Credentials.from_service_account_file(data['account_file'], scopes=['https://www.googleapis.com/auth/calendar'])
         self.service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
-        self.ids = data['calendar']
-        self.dejur = data['dejur']
+        self.ids = data['calendars']
+        self.attendants = data['attendants']
         self.multi_cal = data['multi_cal']
 
     def clear(self):
         for cal in self.ids:
-            now = datetime.utcnow().isoformat() + 'Z'
+            now = (date.today()-timedelta(days = 1)).isoformat()+'T20:59:00Z'
             events_result = self.service.events().list(calendarId=self.ids[cal], timeMin=now,
                                                        singleEvents=True,
                                                        orderBy='startTime').execute()
@@ -75,6 +75,6 @@ class GoogleCalendar():
             if i_day.weekday() == 6:
                 continue
             delta = i_day - delt_date
-            attendant = self.dejur[(delta.days % len(self.dejur))-delta.days//7 % len(self.dejur)]
+            attendant = self.attendants[(delta.days % len(self.attendants))-delta.days//7 % len(self.attendants)]
             event = self.create_attendant_dict(attendant,i_day.isoformat())
             self.service.events().insert(calendarId=self.ids['д'],body=event).execute()
